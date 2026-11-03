@@ -2,7 +2,6 @@ const Anthropic = require('@anthropic-ai/sdk');
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-// Helper to build lead context string
 function buildLeadContext(lead) {
   return `Prospect details:
 - Name: ${lead.first_name} ${lead.last_name}
@@ -15,7 +14,7 @@ function buildLeadContext(lead) {
 - Company website: ${lead.company_website || 'Not available'}`;
 }
 
-// Helper to parse JSON from Claude response
+// Model output sometimes arrives inside a markdown fence.
 function parseJsonResponse(rawText, requiredFields = []) {
   let parsed;
   try {
@@ -39,10 +38,6 @@ function parseJsonResponse(rawText, requiredFields = []) {
 
   return parsed;
 }
-
-// ============================================
-// EMAIL GENERATION
-// ============================================
 
 function buildColdPrompt(lead, userContext) {
   return `You are a professional sales copywriter. Write a cold outreach email to a prospect.
@@ -95,10 +90,6 @@ async function generateEmail({ lead, emailType, userContext }) {
   return parseJsonResponse(message.content[0].text.trim(), ['subject', 'body']);
 }
 
-// ============================================
-// VOICE DROP GENERATION
-// ============================================
-
 async function generateVoiceDrop(lead, userContext) {
   const prompt = `You are a professional sales voice coach. Write a voicemail script for a sales rep to leave.
 
@@ -124,10 +115,6 @@ Return JSON: { "script": "the voicemail script", "estimated_duration_seconds": n
 
   return parseJsonResponse(message.content[0].text.trim(), ['script']);
 }
-
-// ============================================
-// COLD CALL SCRIPT GENERATION
-// ============================================
 
 async function generateCallScript(lead, userContext) {
   const prompt = `You are a sales call preparation expert. Create a cold call script with talking points.
@@ -165,10 +152,6 @@ Return JSON:
   return parseJsonResponse(message.content[0].text.trim(), ['opening', 'hook', 'discovery_questions', 'value_prop', 'close']);
 }
 
-// ============================================
-// LINKEDIN GENERATION
-// ============================================
-
 async function generateLinkedInConnection(lead, userContext) {
   const prompt = `Write a LinkedIn connection request message.
 
@@ -193,7 +176,7 @@ Return JSON: { "message": "the connection request message" }`;
 
   const result = parseJsonResponse(message.content[0].text.trim(), ['message']);
 
-  // Enforce LinkedIn character limit
+  // Connection notes are limited to 300 characters.
   if (result.message.length > 300) {
     result.message = result.message.substring(0, 297) + '...';
   }
@@ -255,10 +238,6 @@ Return JSON:
   return parseJsonResponse(message.content[0].text.trim(), ['comment_template', 'engagement_question']);
 }
 
-// ============================================
-// SOCIAL POST GENERATION
-// ============================================
-
 async function generateSocialPost(lead, userContext) {
   const prompt = `Create a social media post that would appeal to this prospect's interests.
 
@@ -288,10 +267,6 @@ Return JSON:
 
   return parseJsonResponse(message.content[0].text.trim(), ['post', 'platform']);
 }
-
-// ============================================
-// UNIFIED CONTENT GENERATION
-// ============================================
 
 async function generateContent({ lead, channel, contentType, userContext }) {
   switch (channel) {

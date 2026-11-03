@@ -1,7 +1,4 @@
--- ============================================
--- MIGRATION V2: Multi-Channel Outreach Automation
--- Run this in Supabase SQL Editor after migration.sql
--- ============================================
+-- Apply after migration.sql.
 
 -- Add company_id to existing leads table
 ALTER TABLE leads ADD COLUMN IF NOT EXISTS company_id INTEGER REFERENCES companies(id);

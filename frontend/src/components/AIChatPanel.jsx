@@ -71,7 +71,6 @@ export function AIChatPanel({ isOpen, onToggle, contextType = 'general', context
     const userMessage = input.trim();
     setInput('');
 
-    // If no active conversation, start one
     let convId = activeConversation?.id;
     if (!convId) {
       try {
@@ -88,7 +87,7 @@ export function AIChatPanel({ isOpen, onToggle, contextType = 'general', context
       }
     }
 
-    // Optimistically add user message
+    // Show the message before the reply arrives.
     setMessages(prev => [...prev, { role: 'user', content: userMessage, id: Date.now() }]);
     setSending(true);
 

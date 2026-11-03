@@ -13,7 +13,6 @@ const {
   getCompaniesByStage
 } = require('../services/companyService');
 
-// Get all companies (with optional filtering)
 router.get('/', async (req, res) => {
   try {
     const companies = await getAllCompanies({ stageId: req.query.stage_id, search: req.query.search });
@@ -23,7 +22,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get companies grouped by stage (for Kanban board)
 router.get('/kanban', async (req, res) => {
   try {
     const data = await getCompaniesByStage();
@@ -33,7 +31,6 @@ router.get('/kanban', async (req, res) => {
   }
 });
 
-// Get single company
 router.get('/:id', async (req, res) => {
   try {
     const company = await getCompanyById(req.params.id);
@@ -44,7 +41,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Get company with all its leads
 router.get('/:id/leads', async (req, res) => {
   try {
     const company = await getCompanyWithLeads(req.params.id);
@@ -55,7 +51,6 @@ router.get('/:id/leads', async (req, res) => {
   }
 });
 
-// Create new company
 router.post('/', async (req, res) => {
   try {
     const company = await createCompany(req.body);
@@ -65,7 +60,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update company
 router.put('/:id', async (req, res) => {
   try {
     const company = await updateCompany(req.params.id, req.body);
@@ -75,7 +69,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Update company stage (for Kanban drag-drop)
 router.put('/:id/stage', async (req, res) => {
   try {
     if (!req.body.stage_id) {
@@ -88,7 +81,6 @@ router.put('/:id/stage', async (req, res) => {
   }
 });
 
-// Delete company
 router.delete('/:id', async (req, res) => {
   try {
     const result = await deleteCompany(req.params.id);
@@ -98,7 +90,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// Add lead to company
 router.post('/:id/leads/:leadId', async (req, res) => {
   try {
     const company = await addLeadToCompany(req.params.id, req.params.leadId);
@@ -108,7 +99,6 @@ router.post('/:id/leads/:leadId', async (req, res) => {
   }
 });
 
-// Remove lead from company
 router.delete('/:id/leads/:leadId', async (req, res) => {
   try {
     const result = await removeLeadFromCompany(req.params.leadId);

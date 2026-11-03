@@ -15,7 +15,6 @@ async function seedDatabase() {
     'Closed Lost', 5, '#ef4444'
   ]);
 
-  // Sample companies with their leads
   const sampleCompanies = [
     {
       name: 'TechVault',
@@ -85,7 +84,6 @@ async function seedDatabase() {
     }
   ];
 
-  // Sample sequences
   const sampleSequences = [
     {
       name: 'Cold Outreach - SaaS',
@@ -113,7 +111,6 @@ async function seedDatabase() {
   try {
     await client.query('BEGIN');
 
-    // Create companies and their leads
     for (const company of sampleCompanies) {
       const companyResult = await client.query(`
         INSERT INTO companies (name, domain, industry, size, website, linkedin_url, description, recent_news, stage_id)
@@ -128,7 +125,6 @@ async function seedDatabase() {
         [companyId, { source: 'seed' }]
       );
 
-      // Create leads for this company
       for (const lead of company.leads) {
         const leadResult = await client.query(`
           INSERT INTO leads (first_name, last_name, email, company, job_title, phone,
@@ -148,7 +144,6 @@ async function seedDatabase() {
       }
     }
 
-    // Create sequences
     for (const seq of sampleSequences) {
       const seqResult = await client.query(`
         INSERT INTO sequences (name, description, is_active)

@@ -171,8 +171,6 @@ async function deleteCompany(id) {
     throw err;
   }
 
-  // Note: Leads will have company_id set to NULL due to ON DELETE SET NULL
-  // or we could cascade delete leads too
   await query('DELETE FROM companies WHERE id = $1', [Number(id)]);
   return { deleted: true };
 }
@@ -214,7 +212,6 @@ async function removeLeadFromCompany(leadId) {
   return { success: true };
 }
 
-// Get companies grouped by stage for Kanban board
 async function getCompaniesByStage() {
   const { rows: stages } = await query('SELECT * FROM pipeline_stages ORDER BY display_order');
 

@@ -12,7 +12,6 @@ const {
   deleteConversation
 } = require('../services/aiChatService');
 
-// Email generation endpoint
 router.post('/generate-email', async (req, res) => {
   try {
     const { lead_id, email_type, context } = req.body;
@@ -55,11 +54,6 @@ router.post('/generate-email', async (req, res) => {
   }
 });
 
-// ============================================
-// AI Chat Endpoints
-// ============================================
-
-// List all conversations
 router.get('/chat/conversations', async (req, res) => {
   try {
     const conversations = await getConversations({ limit: Number(req.query.limit) || 20 });
@@ -69,7 +63,6 @@ router.get('/chat/conversations', async (req, res) => {
   }
 });
 
-// Create a new conversation
 router.post('/chat/conversations', async (req, res) => {
   try {
     const { context_type = 'general', context_id = null } = req.body;
@@ -80,7 +73,6 @@ router.post('/chat/conversations', async (req, res) => {
   }
 });
 
-// Get a specific conversation with messages
 router.get('/chat/conversations/:id', async (req, res) => {
   try {
     const conversation = await getConversation(req.params.id);
@@ -94,7 +86,6 @@ router.get('/chat/conversations/:id', async (req, res) => {
   }
 });
 
-// Send a message to a conversation (chat)
 router.post('/chat/conversations/:id/messages', async (req, res) => {
   try {
     const { message } = req.body;
@@ -108,7 +99,6 @@ router.post('/chat/conversations/:id/messages', async (req, res) => {
   }
 });
 
-// Delete a conversation
 router.delete('/chat/conversations/:id', async (req, res) => {
   try {
     const result = await deleteConversation(req.params.id);
@@ -117,10 +107,6 @@ router.delete('/chat/conversations/:id', async (req, res) => {
     res.status(err.statusCode || 500).json({ success: false, error: err.message, code: err.code || 'INTERNAL' });
   }
 });
-
-// ============================================
-// Multi-Channel Content Generation
-// ============================================
 
 const { generateContent } = require('../services/aiService');
 
@@ -156,7 +142,6 @@ router.post('/generate-content', async (req, res) => {
       userContext: context || null
     });
 
-    // Store in outreach_content table
     const insertResult = await query(`
       INSERT INTO outreach_content (lead_id, channel, content_type, subject, body, call_script, user_context)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
