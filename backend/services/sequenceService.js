@@ -116,7 +116,6 @@ async function addStep(sequenceId, stepData) {
     throw err;
   }
 
-  // Get the next step_order
   const { rows: maxRows } = await query(
     'SELECT COALESCE(MAX(step_order), 0) as max_order FROM sequence_steps WHERE sequence_id = $1',
     [Number(sequenceId)]
@@ -189,7 +188,6 @@ async function deleteStep(sequenceId, stepId) {
 
   await query('DELETE FROM sequence_steps WHERE id = $1', [Number(stepId)]);
 
-  // Reorder remaining steps
   await query(
     'UPDATE sequence_steps SET step_order = step_order - 1 WHERE sequence_id = $1 AND step_order > $2',
     [Number(sequenceId), deletedOrder]

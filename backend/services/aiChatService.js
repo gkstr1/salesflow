@@ -122,23 +122,18 @@ async function chat(conversationId, userMessage) {
     throw err;
   }
 
-  // Save user message
   await addMessage(conversationId, 'user', userMessage);
 
-  // Get conversation history
   const messages = await getMessages(conversationId);
 
-  // Build context
   const contextStr = await buildContextString(conversation);
   const systemPrompt = SYSTEM_PROMPT + (contextStr ? '\n' + contextStr : '');
 
-  // Build messages array for Claude
   const claudeMessages = messages.map(m => ({
     role: m.role,
     content: m.content
   }));
 
-  // Call Claude
   const response = await client.messages.create({
     model: 'claude-sonnet-4-5',
     max_tokens: 1500,
@@ -148,7 +143,6 @@ async function chat(conversationId, userMessage) {
 
   const assistantMessage = response.content[0].text;
 
-  // Save assistant response
   const savedMessage = await addMessage(conversationId, 'assistant', assistantMessage);
 
   return savedMessage;

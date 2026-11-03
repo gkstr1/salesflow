@@ -47,10 +47,6 @@ CREATE TABLE IF NOT EXISTS activity_log (
   created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- ============================================
--- MULTI-CHANNEL OUTREACH AUTOMATION TABLES
--- ============================================
-
 -- Companies (top-level entity for Kanban board)
 CREATE TABLE IF NOT EXISTS companies (
   id            SERIAL      PRIMARY KEY,
@@ -171,9 +167,6 @@ CREATE TABLE IF NOT EXISTS integration_settings (
   updated_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- ============================================
--- INDEXES FOR PERFORMANCE
--- ============================================
 CREATE INDEX IF NOT EXISTS idx_leads_company_id ON leads(company_id);
 CREATE INDEX IF NOT EXISTS idx_companies_stage_id ON companies(stage_id);
 CREATE INDEX IF NOT EXISTS idx_sequence_enrollments_next_execute ON sequence_enrollments(next_execute_at) WHERE status = 'active';

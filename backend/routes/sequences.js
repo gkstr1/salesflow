@@ -14,12 +14,10 @@ const {
   VALID_CHANNELS
 } = require('../services/sequenceService');
 
-// Get valid channels
 router.get('/channels', (req, res) => {
   res.json({ success: true, data: VALID_CHANNELS });
 });
 
-// Get all sequences
 router.get('/', async (req, res) => {
   try {
     const isActive = req.query.active === 'true' ? true : req.query.active === 'false' ? false : undefined;
@@ -30,7 +28,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get single sequence with steps
 router.get('/:id', async (req, res) => {
   try {
     const sequence = await getSequenceWithSteps(req.params.id);
@@ -43,7 +40,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Create new sequence
 router.post('/', async (req, res) => {
   try {
     const sequence = await createSequence(req.body);
@@ -53,7 +49,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update sequence
 router.put('/:id', async (req, res) => {
   try {
     const sequence = await updateSequence(req.params.id, req.body);
@@ -63,7 +58,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Delete sequence
 router.delete('/:id', async (req, res) => {
   try {
     const result = await deleteSequence(req.params.id);
@@ -73,7 +67,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// Add step to sequence
 router.post('/:id/steps', async (req, res) => {
   try {
     const step = await addStep(req.params.id, req.body);
@@ -83,7 +76,6 @@ router.post('/:id/steps', async (req, res) => {
   }
 });
 
-// Update step
 router.put('/:id/steps/:stepId', async (req, res) => {
   try {
     const step = await updateStep(req.params.id, req.params.stepId, req.body);
@@ -93,7 +85,6 @@ router.put('/:id/steps/:stepId', async (req, res) => {
   }
 });
 
-// Delete step
 router.delete('/:id/steps/:stepId', async (req, res) => {
   try {
     const result = await deleteStep(req.params.id, req.params.stepId);
@@ -103,7 +94,6 @@ router.delete('/:id/steps/:stepId', async (req, res) => {
   }
 });
 
-// Reorder steps
 router.put('/:id/steps/reorder', async (req, res) => {
   try {
     if (!Array.isArray(req.body.step_ids)) {
